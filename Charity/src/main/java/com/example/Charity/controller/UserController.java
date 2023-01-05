@@ -18,7 +18,7 @@ public class UserController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String mainPage() {
-        return "login";
+        return "main";
     }
 
 
