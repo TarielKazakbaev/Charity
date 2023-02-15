@@ -2,7 +2,7 @@
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
           xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
     <head>
-        <title>Spring Security Example</title>
+        <title>Registration Page</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     </head>
     <body>
@@ -19,7 +19,7 @@
 
         <div class="form-floating">
             <h5>PhoneNumber</h5>
-            <input th:value="${phoneNumber}" type="text" required name="name" id="floatingInput" placeholder="phoneNumber">
+            <input th:value="${phoneNumber}" type="number" required name="phoneNumber" id="floatingInput" placeholder="phoneNumber">
         </div>
 
         <div class="form-floating">
@@ -34,12 +34,12 @@
 
         <div class="form-floating">
             <h5>Requisite</h5>
-            <input th:value="${requisite}" type="requisite"  name="requisite" id="floatingInput" placeholder="requisite">
+            <input th:value="${requisite}" type="text"  name="requisite" id="floatingInput" placeholder="requisite">
         </div>
 
         <div class="form-floating">
             <h5>Profile Photo</h5>
-            <input th:value="${profilePhoto}" type="profilePhoto"  name="rprofilePhoto" id="floatingInput" placeholder="profilePhoto">
+            <input  th:value="${profilePhoto}" type="text"  name="profilePhoto">
         </div>
         <br>
         <button class="w-20 btn btn-lg btn-dark" type="submit" value="Create Account">Create Account</button>

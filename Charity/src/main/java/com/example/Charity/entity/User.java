@@ -61,4 +61,6 @@ public class User {
     @Column
     private Boolean active;
 
+
+
 }

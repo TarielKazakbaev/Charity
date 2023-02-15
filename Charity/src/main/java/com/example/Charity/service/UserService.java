@@ -11,7 +11,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +24,9 @@ public class UserService implements UserDetailsService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     @Autowired
     private UserRepository userRepository;
+
     public void save(User user){
+
         user.setDate(new Date());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRecipent(false);
@@ -32,14 +36,14 @@ public class UserService implements UserDetailsService {
             this.userRepository.save(user);
     }
 
-    public void getEmail(String email){
-        User user = this.userRepository.findByEmail(email);
+
+    public User findByEmail(String email){
+        return this.userRepository.findByEmail(email);
     }
 
     public void delete(String email) {
         User user = this.userRepository.findByEmail(email);
         if (user != null) {
-            user.setUsersStatus(UsersStatus.DELETED);
             this.userRepository.save(user);
         }
     }
@@ -105,7 +109,27 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getName(),user.getPassword(),grantedAuthorities);
     }
 
-    public List<User> findAllUsers(){
+    public List<User> findAll(){
         return userRepository.findAll();
     }
+
+    public List<User> findAllUsers(){
+        return userRepository.findAllUsers();
+    }
+    public List<User> findAllModers(){
+        return userRepository.findAllModers();
+    }
+    public List<User> findAllRecipients(){
+        return userRepository.findAllRecipients();
+    }
+    public List<User> findAllAdmins(){
+        return userRepository.findAllAdmins();
+    }
+    public List<User> findAllBanned(){
+        return userRepository.findAllBanned();
+    }
+    public List<User> findAllDeleted(){
+        return userRepository.findAllDeleted();
+    }
+
 }

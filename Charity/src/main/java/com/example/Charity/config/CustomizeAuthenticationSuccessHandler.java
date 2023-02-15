@@ -22,22 +22,6 @@ public class CustomizeAuthenticationSuccessHandler implements AuthenticationSucc
                                         HttpServletResponse response, Authentication authentication)
             throws IOException {
         response.setStatus(HttpServletResponse.SC_OK);
-        for (GrantedAuthority gra : authentication.getAuthorities()) {
-            if (gra.equals(new SimpleGrantedAuthority("USER"))) {
-                response.sendRedirect("/userPage");
-            }
-            else if (gra.equals(new SimpleGrantedAuthority("ADMIN"))) {
-                response.sendRedirect("/adminPage");
-            }
-            else if (gra.equals(new SimpleGrantedAuthority("MODER"))) {
-                response.sendRedirect("/moderPage");
-            }
-            else if(gra.equals(new SimpleGrantedAuthority("RECIPIENT"))){
-                response.sendRedirect("/recipientPage");
-            }
-            else {
-                response.sendRedirect("/main");
-            }
-        }
+        response.sendRedirect("main");
     }
 }

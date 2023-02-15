@@ -45,6 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     CustomizeAuthenticationSuccessHandler customizeAuthenticationSuccessHandler;
 
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
@@ -54,6 +55,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authoritiesByUsernameQuery(rolesQuery)
                 .dataSource(dataSource)
                 .passwordEncoder(passwordEncoder());
+
+
     }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -62,15 +65,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.
                 authorizeRequests()
-                .antMatchers("/","/admin","login","/delete-users","/delete-users-by-email","/active-users","/active-users-by-email",
+                .antMatchers("/","admin","/adminPage","login","/delete-users","/delete-users-by-email","/active-users","/active-users-by-email",
                         "/ban-users" ,"/ban-users-by-email","/change-to-moder","/change-to-moder-by-email","/change-to-user","/change-to-user-by-email",
-                        "/change-to-recipient","/change-to-recipient-by-email").hasAnyAuthority(RoleStatus.ADMIN.name())
+                        "/change-to-recipient","/change-to-recipient-by-email","/find-all","/find-all-users","/find-all-admins","/find-all-moders",
+                        "/find-all-recipients","/find-all-banned","/find-all-deleted","/delete-user/{id}","/delete-user/{id}/delete").hasAnyAuthority(RoleStatus.ADMIN.name())
                 .antMatchers("/","login","/moder","/login","hello","/delete-users","/delete-users-by-email","/active-users","/active-users-by-email",
-                        "/ban-users" ,"/ban-users-by-email","/change-to-user","/change-to-user-by-email").hasAnyAuthority(RoleStatus.MODER.name())
+                        "/ban-users" ,"/ban-users-by-email","/change-to-user","/change-to-user-by-email","/all-new-posts",
+                        "/post/{id}","/post/{id}/approve","/post/{id}/denied").hasAnyAuthority(RoleStatus.MODER.name())
                 .antMatchers("/","login","user","/", "/login","hello","/delete-users","/delete-users-by-email","/create-post","create-new-post").hasAnyAuthority(RoleStatus.USER.name())
                 .antMatchers("/", "/login","/registration","hello","/delete-users","/delete-users-by-email","/active-users","/active-users-by-email",
                         "/ban-users" ,"/ban-users-by-email","/change-to-moder","/change-to-moder-by-email","/change-to-user","/change-to-user-by-email",
-                        "/change-to-recipient","/change-to-recipient-by-email","/change-to-admin","/change-to-admin-by-email","/find-all-users").permitAll()
+                        "/change-to-recipient","/change-to-recipient-by-email","/change-to-admin","/change-to-admin-by-email","/guest","/all-active-posts",
+                        "/createAccount","/create-avatars","/craete-avatar","/myProfile").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and().csrf().disable()

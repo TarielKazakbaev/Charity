@@ -1,25 +1,29 @@
 package com.example.Charity.controller;
 import com.example.Charity.entity.User;
+import com.example.Charity.enums.RoleStatus;
 import com.example.Charity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
 public class UserController {
 
 
+
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String mainPage() {
-        return "main";
-    }
 
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -37,41 +41,42 @@ public class UserController {
         return model;
     }
 
-    @RequestMapping(value = "/main", method = RequestMethod.GET )
-    public String hello(){
-        return "main";
+    @RequestMapping(value = "/guest", method = RequestMethod.GET )
+    public String guest(){
+        return "guest";
     }
 
-    @GetMapping("/registration")
+
+    @GetMapping("/myProfile")
+    public String getUser(Authentication authentication){
+        String userName= authentication.getName();
+        User user = userService.findByEmail(userName);
+        if (user.getRoles().equals(RoleStatus.USER)){
+            return "user";
+        }
+        else if (user.getRoles().equals(RoleStatus.ADMIN)){
+            return "admin";
+        }
+        else if (user.getRoles().equals(RoleStatus.MODER)){
+            return "moder";
+        }
+        else if(user.getRoles().equals(RoleStatus.RECIPIENT)){
+            return "recipient";
+        }
+        return "redirect:main";
+    }
+
+    @GetMapping("/createAccount")
     public String registrationPage(){
         return "registration";
     }
 
-    @GetMapping("/adminPage")
-    public String adminPage(){
-        return "admin";
-    }
 
-    @GetMapping("/moderPage")
-    public String moderPage(){
-        return "moder";
-    }
-
-    @GetMapping("/userPage")
-    public String userPage(){
-        return "user";
-    }
-
-    @GetMapping("/recipientPage")
-    public String recipientPage(){
-        return "recipient";
-
-    }
 
     @PostMapping(value = "/registration")
-    public String registration(@ModelAttribute User user){
+    public String registration(@ModelAttribute User user)  {
         this.userService.save(user);
-        return "user";
+        return "login";
     }
 
 
@@ -79,6 +84,7 @@ public class UserController {
     public String delete(){
         return "delete";
     }
+
 
 
     @PostMapping(value = "/delete-users-by-email")
@@ -141,12 +147,55 @@ public class UserController {
         this.userService.recipient(user.getEmail());
         return "login";
     }
+    @GetMapping(value = "/find-all")
+    public String findAll(Model model) {
+        List<User> users = userService.findAll();
+        model.addAttribute("users", users);
+        return "getAllUsers";
+    }
 
     @GetMapping(value = "/find-all-users")
-    public String postMain(Model model) {
+    public String findUsers(Model model) {
         List<User> users = userService.findAllUsers();
         model.addAttribute("users", users);
         return "getAllUsers";
     }
+
+
+    @GetMapping(value = "/find-all-moders")
+    public String findModers(Model model) {
+        List<User> users = userService.findAllModers();
+        model.addAttribute("users", users);
+        return "getAllUsers";
+    }
+
+    @GetMapping(value = "/find-all-recipients")
+    public String findRecipients(Model model) {
+        List<User> users = userService.findAllRecipients();
+        model.addAttribute("users", users);
+        return "getAllUsers";
+    }
+
+    @GetMapping(value = "/find-all-admins")
+    public String findAdmins(Model model) {
+        List<User> users = userService.findAllAdmins();
+        model.addAttribute("users", users);
+        return "getAllUsers";
+    }
+
+    @GetMapping(value = "/find-all-banned")
+    public String findBanned(Model model) {
+        List<User> users = userService.findAllBanned();
+        model.addAttribute("users", users);
+        return "getAllUsers";
+    }
+
+    @GetMapping(value = "/find-all-deleted")
+    public String findDeleted(Model model) {
+        List<User> users = userService.findAllDeleted();
+        model.addAttribute("users", users);
+        return "getAllUsers";
+    }
+
 
 }
